@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "SExplosiveBarrel.generated.h"
 
+class URadialForceComponent;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASExplosiveBarrel : public AActor
@@ -14,6 +15,9 @@ class ACTIONROGUELIKE_API ASExplosiveBarrel : public AActor
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* MeshComp;
+
+	UPROPERTY(VisibleAnywhere)
+	URadialForceComponent* ForceComp;
 
 public:
 
