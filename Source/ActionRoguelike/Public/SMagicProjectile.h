@@ -10,6 +10,8 @@ class USphereComponent;
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
 
+const float DEFAULT_PROJECTILE_LIFESPAN = 5.0;
+
 UCLASS()
 class ACTIONROGUELIKE_API ASMagicProjectile : public AActor
 {
@@ -39,4 +41,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void OnHit(
+		UPrimitiveComponent* HitComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		FVector NormalImpulse,
+		const FHitResult& Hit);
 };

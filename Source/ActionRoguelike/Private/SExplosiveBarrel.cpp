@@ -35,6 +35,7 @@ void ASExplosiveBarrel::OnHit(
 	const FHitResult& Hit)
 {
 	Explode();
+	Destroy();
 }
 
 void ASExplosiveBarrel::Explode()

@@ -18,6 +18,7 @@ ASMagicProjectile::ASMagicProjectile()
 	// 	SphereComp->SetCollisionResponseToAllChannels(ECR_Ignore);
 	// 	SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	SphereComp->SetCollisionProfileName("Projectile");
+	SphereComp->OnComponentHit.AddDynamic(this, &ASMagicProjectile::OnHit);
 	RootComponent = SphereComp;
 
 	EffectComp = CreateDefaultSubobject<UParticleSystemComponent>("EffectComp");
@@ -27,6 +28,8 @@ ASMagicProjectile::ASMagicProjectile()
 	MovementComp->InitialSpeed = 1000.f;
 	MovementComp->bRotationFollowsVelocity = true;
 	MovementComp->bInitialVelocityInLocalSpace = true;
+
+	InitialLifeSpan = DEFAULT_PROJECTILE_LIFESPAN;
 
 }
 
@@ -42,5 +45,19 @@ void ASMagicProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ASMagicProjectile::OnHit(
+	UPrimitiveComponent* HitComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse,
+	const FHitResult& Hit)
+{
+	check(GEngine);
+	GEngine->AddOnScreenDebugMessage(
+		-1, 15.0f, FColor::Yellow, TEXT("Projectile OnHit triggered."));
+
+	Destroy();
 }
 
