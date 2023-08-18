@@ -23,7 +23,7 @@ void ASItemChest::Interact_Implementation(APawn* InstigatorPawn)
 {
 	check(GEngine);
 	GEngine->AddOnScreenDebugMessage(
-		-1, 15.0f, FColor::Yellow, TEXT("Interacted."));
+		-1, 15.0f, FColor::Yellow, TEXT("Chest interacted with."));
 
 	LidMesh->SetRelativeRotation(FRotator(LidOpenPitch, 0, 0));
 }

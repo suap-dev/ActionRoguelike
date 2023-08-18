@@ -3,6 +3,7 @@
 
 #include "SIteractionComponent.h"
 #include "SGameplayInterface.h"
+#include "Chaos/Rotation.h"
 
 // Sets default values for this component's properties
 USIteractionComponent::USIteractionComponent()
@@ -54,23 +55,48 @@ void USIteractionComponent::PrimaryInteract()
 	FVector Start = EyesLocation;
 	FVector End = EyesLocation + (EyesRotation.Vector() * 500);
 
-	FHitResult Hit;
-	bool bTraceHit =
-		GetWorld()->LineTraceSingleByObjectType(Hit, Start, End, ObjectQueryParams);
-	// We can debug-trace this line like so:
+// 	FHitResult Hit;
+// 	bool bTraceHit =
+// 		GetWorld()->LineTraceSingleByObjectType(Hit, Start, End, ObjectQueryParams);
+// 	// We can debug-trace this line like so:
+// 
+// 	DrawDebugLine(
+// 		GetWorld(), Start, End,
+// 		bTraceHit ? FColor::Green : FColor::Red,
+// 		false, 2.0f, 0, 1.0f);
+// 
+// 	AActor* HitActor = Hit.GetActor();
+// 	// ATTENTION - pay attention that we actually check if
+// 	// HitActor Implements USGameplayInterface, not ISGameplayInterface
+// 	if (HitActor && HitActor->Implements<USGameplayInterface>())
+// 	{
+// 		// AND THEN we actually use the ISGAmeplayInterface
+// 		ISGameplayInterface::Execute_Interact(HitActor, Cast<APawn>(MyOwner));
+// 	}
 
-	DrawDebugLine( 
-		GetWorld(), Start, End,
-		bTraceHit ? FColor::Green : FColor::Red,
-		false, 2.0f, 0, 1.0f);
 
-	AActor* HitActor = Hit.GetActor();
-	// ATTENTION - pay attention that we actually check if
-	// HitActor Implements USGameplayInterface, not ISGameplayInterface
-	if (HitActor && HitActor->Implements<USGameplayInterface>())
+	TArray<FHitResult> OutHits;
+
+	FCollisionShape CollisionShape;
+	const float COLLISION_SPHERE_RADIUS = 30.0f;
+	CollisionShape.SetSphere(COLLISION_SPHERE_RADIUS);
+
+	GetWorld()->SweepMultiByObjectType(
+		OutHits, Start, End, FQuat::Identity, ObjectQueryParams, CollisionShape);
+
+	for (FHitResult& Hit : OutHits)
 	{
-		// AND THEN we actually use the ISGAmeplayInterface
-		ISGameplayInterface::Execute_Interact(HitActor, Cast<APawn>(MyOwner));
+		DrawDebugSphere(
+			GetWorld(),
+			Hit.Location, COLLISION_SPHERE_RADIUS,
+			int32(COLLISION_SPHERE_RADIUS), FColor::Green,
+			false, 2.0f, 0, 1.0f);
+
+		AActor* HitActor = Hit.GetActor();
+		if (HitActor && HitActor->Implements<USGameplayInterface>()) {
+			ISGameplayInterface::Execute_Interact(HitActor, Cast<APawn>(MyOwner));
+			break;	// without this break we'd open everything in the path of the sweep
+		}
 	}
 
 }
