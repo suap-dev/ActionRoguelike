@@ -5,6 +5,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "SIteractionComponent.h"
+
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -24,7 +26,10 @@ ASCharacter::ASCharacter()
 
 	bUseControllerRotationYaw = false;
 
+	InteractionComp = CreateDefaultSubobject<USIteractionComponent>("InteractionComp");
+
 }
+
 
 // Called when the game starts or when spawned
 void ASCharacter::BeginPlay()
@@ -33,12 +38,14 @@ void ASCharacter::BeginPlay()
 
 }
 
+
 // Called every frame
 void ASCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
+
 
 // Called to bind functionality to input
 void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -56,7 +63,11 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->
 		BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 
+	PlayerInputComponent->
+		BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
+
 }
+
 
 void ASCharacter::MoveForward(float Value)
 {
@@ -67,6 +78,7 @@ void ASCharacter::MoveForward(float Value)
 	AddMovementInput(ControlRot.Vector(), Value);
 
 }
+
 
 void ASCharacter::MoveRight(float Value)
 {
@@ -88,6 +100,7 @@ void ASCharacter::MoveRight(float Value)
 
 }
 
+
 void ASCharacter::PrimaryAttack()
 {
 	FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
@@ -99,5 +112,13 @@ void ASCharacter::PrimaryAttack()
 
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 
+}
+
+
+void ASCharacter::PrimaryInteract()
+{
+	// We don't have to check for nullptr, because we exactly know 
+	// what is the lifetime of the owner of this particular call.
+	InteractionComp->PrimaryInteract();
 }
 

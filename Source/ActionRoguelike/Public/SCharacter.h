@@ -8,6 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class USIteractionComponent;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -31,6 +32,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
 
+	UPROPERTY(VisibleAnywhere)
+	USIteractionComponent* InteractionComp;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -46,5 +50,7 @@ public:
 	void MoveRight(float Value);
 
 	void PrimaryAttack();
+
+	void PrimaryInteract();
 
 };

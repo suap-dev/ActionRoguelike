@@ -41,7 +41,7 @@ void ASExplosiveBarrel::Explode()
 {
 	check(GEngine);
 	GEngine->AddOnScreenDebugMessage(
-		-1, 15.0f, FColor::Yellow, TEXT("Some debug message!"));
+		-1, 15.0f, FColor::Yellow, TEXT("Barrel exploded!"));
 
 	ForceComp->FireImpulse();
 }
