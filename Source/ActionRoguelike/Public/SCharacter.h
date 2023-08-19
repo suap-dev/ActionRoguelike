@@ -8,7 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
-class USIteractionComponent;
+class USInteractionComponent;
 class UAnimMontage;
 
 UCLASS()
@@ -25,7 +25,7 @@ protected:
 	UCameraComponent* CameraComp;
 
 	UPROPERTY(VisibleAnywhere)
-	USIteractionComponent* InteractionComp;
+	USInteractionComponent* InteractionComp;
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> ProjectileClass;

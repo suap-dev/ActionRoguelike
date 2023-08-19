@@ -1,14 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "SIteractionComponent.h"
+#include "SInteractionComponent.h"
 #include "SGameplayInterface.h"
 #include "Chaos/Rotation.h"
 #include "SCharacter.h"
 #include "Camera/CameraComponent.h"
 
 // Sets default values for this component's properties
-USIteractionComponent::USIteractionComponent()
+USInteractionComponent::USInteractionComponent()
 {
 	// Set this component to be initialized when the game starts,
 	// and to be ticked every frame.  You can turn these features
@@ -20,7 +20,7 @@ USIteractionComponent::USIteractionComponent()
 
 
 // Called when the game starts
-void USIteractionComponent::BeginPlay()
+void USInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -30,7 +30,7 @@ void USIteractionComponent::BeginPlay()
 
 
 // Called every frame
-void USIteractionComponent::TickComponent(
+void USInteractionComponent::TickComponent(
 	float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -39,7 +39,7 @@ void USIteractionComponent::TickComponent(
 }
 
 
-void USIteractionComponent::PrimaryInteract()
+void USInteractionComponent::PrimaryInteract()
 {
 	FVector Start;
 	FVector End;

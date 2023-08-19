@@ -5,7 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "SIteractionComponent.h"
+#include "SInteractionComponent.h"
 
 
 // Sets default values
@@ -26,7 +26,7 @@ ASCharacter::ASCharacter()
 
 	bUseControllerRotationYaw = false;
 
-	InteractionComp = CreateDefaultSubobject<USIteractionComponent>("InteractionComp");
+	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComp");
 
 }
 

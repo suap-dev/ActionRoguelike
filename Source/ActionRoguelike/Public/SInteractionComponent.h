@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "SIteractionComponent.generated.h"
+#include "SInteractionComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class ACTIONROGUELIKE_API USIteractionComponent : public UActorComponent
+class ACTIONROGUELIKE_API USInteractionComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -18,7 +18,7 @@ public:
 
 public:
 	// Sets default values for this component's properties
-	USIteractionComponent();
+	USInteractionComponent();
 
 protected:
 	// Called when the game starts
