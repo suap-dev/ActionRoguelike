@@ -25,6 +25,6 @@ public:
 
 	// Even though it's declared as Interact, the implementation differs in name,
 	// because of the exposition to Blueprint and the Unrealism/boilerplate.
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Interact(APawn* InstigatorPawn);
 };
