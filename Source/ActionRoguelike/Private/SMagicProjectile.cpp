@@ -58,6 +58,6 @@ void ASMagicProjectile::OnHit(
 	GEngine->AddOnScreenDebugMessage(
 		-1, 15.0f, FColor::Yellow, TEXT("Projectile OnHit triggered."));
 
-	Destroy();
+// 	Destroy();
 }
 
