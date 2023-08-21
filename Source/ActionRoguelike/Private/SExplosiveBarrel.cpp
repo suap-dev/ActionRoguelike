@@ -13,17 +13,31 @@ ASExplosiveBarrel::ASExplosiveBarrel()
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	MeshComp->SetSimulatePhysics(true);
-	MeshComp->SetCollisionProfileName("PhysicsActor");
+	// 	MeshComp->SetCollisionProfileName("PhysicsActor");
 	// 	MeshComp->SetCollisionObjectType(ECC_PhysicsBody);
 
-	MeshComp->OnComponentHit.AddDynamic(this, &ASExplosiveBarrel::OnHit);
+	// 	MeshComp->OnComponentHit.AddDynamic(this, &ASExplosiveBarrel::OnHit);
+
 	RootComponent = MeshComp;
 
 	ForceComp = CreateDefaultSubobject<URadialForceComponent>("ForceComp");
-	ForceComp->AddCollisionChannelToAffect(ECC_PhysicsBody);
+	// 	ForceComp->AddCollisionChannelToAffect(ECC_PhysicsBody);
+	ForceComp->AddCollisionChannelToAffect(ECC_WorldDynamic);
 	ForceComp->ImpulseStrength = 150000.0f;
 	ForceComp->Radius = 1500.0f;
+	// 	ForceComp->bImpulseVelChange = true; // Impulse velocity scales with objects mass
+	ForceComp->SetAutoActivate(false);
 	ForceComp->SetupAttachment(RootComponent);
+
+}
+
+// this is called BEFORE BeginPlay, after the constructor.
+void ASExplosiveBarrel::PostInitializeComponents()
+{
+	// Remember to call the parent function!
+	Super::PostInitializeComponents();
+
+	MeshComp->OnComponentHit.AddDynamic(this, &ASExplosiveBarrel::OnHit);
 
 }
 
