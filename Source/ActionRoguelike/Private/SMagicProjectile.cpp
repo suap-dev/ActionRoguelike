@@ -26,7 +26,7 @@ ASMagicProjectile::ASMagicProjectile()
 
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComp");
 	MovementComp->InitialSpeed = 1000.f;
-	MovementComp->bRotationFollowsVelocity = true;
+	MovementComp->bRotationFollowsVelocity = true;	// this happens each frame
 	MovementComp->bInitialVelocityInLocalSpace = true;
 
 	InitialLifeSpan = DEFAULT_PROJECTILE_LIFESPAN;
