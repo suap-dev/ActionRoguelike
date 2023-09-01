@@ -117,6 +117,19 @@ void ASCharacter::PrimaryAttack()
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
 	FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+
+	// TODO: Get direction from what is camera directly looking at
+
+	RightHandLocation;
+	CameraComp->GetForwardVector();
+
+	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
+	// before completing the task below
+	// 
+	// TODO: LineTrace with proper method
+	// if we didn't hit anythoig just use the camera direction
+	// (since the projectile is going to fly quite far away anyway)
+
 	FTransform SpawnTM = FTransform(GetControlRotation(), RightHandLocation);
 
 	FActorSpawnParameters SpawnParams;
