@@ -13,6 +13,7 @@ ASExplosiveBarrel::ASExplosiveBarrel()
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	MeshComp->SetSimulatePhysics(true);
+	MeshComp->SetCollisionProfileName("PhysicsActor");
 	// 	MeshComp->SetCollisionProfileName("PhysicsActor");
 	// 	MeshComp->SetCollisionObjectType(ECC_PhysicsBody);
 

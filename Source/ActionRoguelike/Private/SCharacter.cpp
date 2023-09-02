@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "SInteractionComponent.h"
+#include "../Private/KismetTraceUtils.h"
 
 
 // Sets default values
@@ -119,25 +120,39 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 	FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 
 	// TODO: Get direction from what is camera directly looking at
+	FVector Start = CameraComp->GetComponentLocation();
+	FVector End = Start + CameraComp->GetForwardVector() * 5000;
 
-	RightHandLocation;
-	CameraComp->GetForwardVector();
+	FHitResult HitResult;
+	bool bHit = GetWorld()->LineTraceSingleByProfile(HitResult, Start, End, "Projectile");
+
+	DrawDebugLineTraceSingle(
+		GetWorld(), Start, End, EDrawDebugTrace::ForDuration,
+		bHit, HitResult,
+		FLinearColor::Blue, FLinearColor::Green, 2.0f);
+
+	FRotator AimRotation;
+	if (bHit)
+	{
+		AimRotation = (HitResult.Location - RightHandLocation).Rotation();
+
+	}
+	else
+	{
+		AimRotation = CameraComp->GetComponentRotation();
+
+	}
 
 	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
-	// before completing the task below
-	// 
-	// TODO: LineTrace with proper method
-	// if we didn't hit anythoig just use the camera direction
-	// (since the projectile is going to fly quite far away anyway)
 
-	FTransform SpawnTM = FTransform(GetControlRotation(), RightHandLocation);
+	FTransform SpawnTransform = FTransform(AimRotation, RightHandLocation);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride =
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
 
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
 
 }
 
