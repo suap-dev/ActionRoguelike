@@ -61,11 +61,13 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
-	PlayerInputComponent->
-		BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 
 	PlayerInputComponent->
 		BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
+
+
+	PlayerInputComponent->
+		BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 
 	PlayerInputComponent->
 		BindAction("SecondaryAttack", IE_Pressed, this, &ASCharacter::SecondaryAttack);
@@ -182,7 +184,7 @@ void ASCharacter::SecondaryAttack_TimeElapsed()
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
 
-	GetWorld()->SpawnActor<AActor>(PrimaryProjectileClass, SpawnTransform, SpawnParams);
+	GetWorld()->SpawnActor<AActor>(SecondaryProjectileClass, SpawnTransform, SpawnParams);
 
 }
 
