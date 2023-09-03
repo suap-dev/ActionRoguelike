@@ -30,7 +30,7 @@ ASProjectileBase::ASProjectileBase()
 	MovementComp->InitialSpeed = InitialSpeed;	// default is set in header
 	InitialLifeSpan = 5.0f;
 
-
+	MovementComp->ProjectileGravityScale = 0.0f;
 }
 
 // Called when the game starts or when spawned

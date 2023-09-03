@@ -108,6 +108,11 @@ protected:
 	void SecondaryAttack_TimeElapsed();
 
 
+	void TertiaryAttack();
+
+	void TertiaryAttack_TimeElapsed();
+
+
 	FRotator GetAimRotationFromMuzzle(const FVector& MuzzleLocation, float Range = 5000.0f);
 
 };

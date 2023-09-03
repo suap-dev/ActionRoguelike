@@ -72,6 +72,9 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->
 		BindAction("SecondaryAttack", IE_Pressed, this, &ASCharacter::SecondaryAttack);
 
+	PlayerInputComponent->
+		BindAction("TertiaryAttack", IE_Pressed, this, &ASCharacter::TertiaryAttack);
+
 }
 
 
@@ -113,7 +116,6 @@ void ASCharacter::PrimaryInteract()
 	// what is the lifetime of the owner of this particular call.
 	InteractionComp->PrimaryInteract();
 
-
 }
 
 
@@ -153,8 +155,6 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 
 
 // TODO: SecondaryAttack is ALMOST IDENTICAL to PrimaryAttack. DRY!
-// TODO: Introduce variable for secondary attack projectile class
-// TODO: change ProjectileClass to PrimaryProjectileClass?
 // TODO: Should all attacks share the TimerHandle?
 void ASCharacter::SecondaryAttack()
 {
@@ -188,6 +188,38 @@ void ASCharacter::SecondaryAttack_TimeElapsed()
 
 }
 
+
+void ASCharacter::TertiaryAttack()
+{
+	PlayAnimMontage(TertiaryAttackAnimation);
+
+	GetWorldTimerManager().SetTimer(
+		TimerHandle_TertiaryAttack, this,
+		&ASCharacter::TertiaryAttack_TimeElapsed, TertiaryAttackFireDelay);
+}
+
+
+void ASCharacter::TertiaryAttack_TimeElapsed()
+{
+	FVector MuzzleLocation = GetMesh()->GetSocketLocation(TertiaryAttackMuzzleName);
+	FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
+
+	DrawDebugLine(
+		GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
+		FColor::Purple, false, 2.0f);
+
+	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
+
+	FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride =
+		ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+
+	GetWorld()->SpawnActor<AActor>(TertiaryProjectileClass, SpawnTransform, SpawnParams);
+
+}
 
 FRotator ASCharacter::GetAimRotationFromMuzzle(const FVector& MuzzleLocation, float Range /*= 5000.0f*/)
 {
