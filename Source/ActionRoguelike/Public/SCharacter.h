@@ -59,6 +59,20 @@ protected:
 	FTimerHandle TimerHandle_SecondaryAttack;
 
 
+	UPROPERTY(EditAnywhere, Category = "Attack - Tertiary", DisplayName = "Projectile Class")
+	TSubclassOf<AActor> TertiaryProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack - Tertiary", DisplayName = "Attack Animation")
+	UAnimMontage* TertiaryAttackAnimation;
+
+	UPROPERTY(EditAnywhere, Category = "Attack - Tertiary", DisplayName = "Fire Delay")
+	float TertiaryAttackFireDelay;
+
+	UPROPERTY(EditAnywhere, Category = "Attack - Tertiary", DisplayName = "Muzzle Socket")
+	FName TertiaryAttackMuzzleName;
+
+	FTimerHandle TimerHandle_TertiaryAttack;
+
 public:
 	// Sets default values for this character's properties
 	ASCharacter();
@@ -82,8 +96,6 @@ protected:
 
 
 	void PrimaryInteract();
-
-	void PerformAttack(UAnimMontage* AttackAnimation, FTimerHandle& AttackTimerHandle, FTimerDelegate& AttackDelegate, float AttackTimerDuration);
 	
 
 	void PrimaryAttack();
