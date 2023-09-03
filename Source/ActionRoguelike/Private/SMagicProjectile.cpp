@@ -10,8 +10,6 @@ ASMagicProjectile::ASMagicProjectile()
 	: Super()
 {
 // 	SphereComp->OnComponentHit.AddDynamic(this, &ASMagicProjectile::OnHit);
-	MovementComp->InitialSpeed = 1000.f;
-	InitialLifeSpan = 5.0f;
 
 }
 

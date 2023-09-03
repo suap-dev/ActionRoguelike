@@ -29,7 +29,10 @@ protected:
 	UProjectileMovementComponent* MovementComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UParticleSystemComponent* EffectComp;	
+	UParticleSystemComponent* EffectComp;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float InitialSpeed = 1000.0f;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -27,6 +27,9 @@ ASProjectileBase::ASProjectileBase()
 	MovementComp->bRotationFollowsVelocity = true;	// this happens each frame
 	MovementComp->bInitialVelocityInLocalSpace = true;
 
+	MovementComp->InitialSpeed = InitialSpeed;	// default is set in header
+	InitialLifeSpan = 5.0f;
+
 
 }
 
