@@ -111,7 +111,9 @@ void ASCharacter::PrimaryInteract()
 	// what is the lifetime of the owner of this particular call.
 	InteractionComp->PrimaryInteract();
 
+
 }
+
 
 
 void ASCharacter::PrimaryAttack()
@@ -119,25 +121,23 @@ void ASCharacter::PrimaryAttack()
 	PlayAnimMontage(PrimiaryAttackAnimation);
 
 	GetWorldTimerManager().SetTimer(
-		TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, 0.15f);
-
-	// 	GetWorldTimerManager().ClearTimer(TimerHandle_PrimaryAttack);
-
+		TimerHandle_PrimaryAttack, this,
+		&ASCharacter::PrimaryAttack_TimeElapsed, PrimaryAttackFireDelay);
 }
 
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
-	FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	FRotator AimRotation = GetAimRotationFromMuzzle(RightHandLocation);
+	FVector MuzzleLocation = GetMesh()->GetSocketLocation(PrimaryAttackMuzzleName);
+	FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
 
 	DrawDebugLine(
-		GetWorld(), RightHandLocation, RightHandLocation + AimRotation.Vector() * 5000,
+		GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
 		FColor::Purple, false, 2.0f);
 
 	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
 
-	FTransform SpawnTransform = FTransform(AimRotation, RightHandLocation);
+	FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride =
@@ -148,31 +148,34 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 
 }
 
+
+
 // TODO: SecondaryAttack is ALMOST IDENTICAL to PrimaryAttack. DRY!
 // TODO: Introduce variable for secondary attack projectile class
 // TODO: change ProjectileClass to PrimaryProjectileClass?
+// TODO: Should all attacks share the TimerHandle?
 void ASCharacter::SecondaryAttack()
 {
-	PlayAnimMontage(PrimiaryAttackAnimation);
+	PlayAnimMontage(SecondaryAttackAnimation);
 
 	GetWorldTimerManager().SetTimer(
-		TimerHandle_PrimaryAttack, this, &ASCharacter::SecondaryAttack_TimeElapsed, 0.15f);
-
+		TimerHandle_SecondaryAttack, this,
+		&ASCharacter::SecondaryAttack_TimeElapsed, SecondaryAttackFireDelay);
 }
 
 
 void ASCharacter::SecondaryAttack_TimeElapsed()
 {
-	FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	FRotator AimRotation = GetAimRotationFromMuzzle(RightHandLocation);
+	FVector MuzzleLocation = GetMesh()->GetSocketLocation(SecondaryAttackMuzzleName);
+	FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
 
 	DrawDebugLine(
-		GetWorld(), RightHandLocation, RightHandLocation + AimRotation.Vector() * 5000,
+		GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
 		FColor::Purple, false, 2.0f);
 
 	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
 
-	FTransform SpawnTransform = FTransform(AimRotation, RightHandLocation);
+	FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride =
@@ -211,6 +214,6 @@ FRotator ASCharacter::GetAimRotationFromMuzzle(const FVector& MuzzleLocation, fl
 	// 	}
 	// 
 	// 	return AimRotation;
-	
+
 	return ((bHit ? HitResult.Location : TraceEnd) - MuzzleLocation).Rotation();
 }

@@ -38,6 +38,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Attack - Primary", DisplayName = "Fire Delay")
 	float PrimaryAttackFireDelay;
 
+	UPROPERTY(EditAnywhere, Category = "Attack - Primary", DisplayName = "Muzzle Socket")
+	FName PrimaryAttackMuzzleName;
+
 	FTimerHandle TimerHandle_PrimaryAttack;
 
 
@@ -49,6 +52,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Attack - Secondary", DisplayName = "Fire Delay")
 	float SecondaryAttackFireDelay;
+
+	UPROPERTY(EditAnywhere, Category = "Attack - Secondary", DisplayName = "Muzzle Socket")
+	FName SecondaryAttackMuzzleName;
 
 	FTimerHandle TimerHandle_SecondaryAttack;
 
@@ -77,6 +83,8 @@ protected:
 
 	void PrimaryInteract();
 
+	void PerformAttack(UAnimMontage* AttackAnimation, FTimerHandle& AttackTimerHandle, FTimerDelegate& AttackDelegate, float AttackTimerDuration);
+	
 
 	void PrimaryAttack();
 
@@ -88,6 +96,6 @@ protected:
 	void SecondaryAttack_TimeElapsed();
 
 
-	FRotator GetAimRotationFromMuzzle(const FVector &MuzzleLocation, float Range = 5000.0f);
+	FRotator GetAimRotationFromMuzzle(const FVector& MuzzleLocation, float Range = 5000.0f);
 
 };
