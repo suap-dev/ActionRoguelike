@@ -143,6 +143,10 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 
 	}
 
+	DrawDebugLine(
+		GetWorld(), RightHandLocation, RightHandLocation + AimRotation.Vector() * 2000,
+		FColor::Purple, false, 2.0f);
+
 	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
 
 	FTransform SpawnTransform = FTransform(AimRotation, RightHandLocation);
