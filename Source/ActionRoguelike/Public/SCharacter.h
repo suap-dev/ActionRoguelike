@@ -18,6 +18,7 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 
 protected:
 
+	// TODO: fix the UPROPERTIES
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
@@ -27,13 +28,29 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USInteractionComponent* InteractionComp;
 
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> ProjectileClass;
 
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	UAnimMontage* AttackAnim;
+	UPROPERTY(EditAnywhere, Category = "Attack - Primary", DisplayName = "Projectile Class")
+	TSubclassOf<AActor> PrimaryProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack - Primary", DisplayName = "Attack Animation")
+	UAnimMontage* PrimiaryAttackAnimation;
+
+	UPROPERTY(EditAnywhere, Category = "Attack - Primary", DisplayName = "Fire Delay")
+	float PrimaryAttackFireDelay;
 
 	FTimerHandle TimerHandle_PrimaryAttack;
+
+
+	UPROPERTY(EditAnywhere, Category = "Attack - Secondary", DisplayName = "Projectile Class")
+	TSubclassOf<AActor> SecondaryProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack - Secondary", DisplayName = "Attack Animation")
+	UAnimMontage* SecondaryAttackAnimation;
+
+	UPROPERTY(EditAnywhere, Category = "Attack - Secondary", DisplayName = "Fire Delay")
+	float SecondaryAttackFireDelay;
+
+	FTimerHandle TimerHandle_SecondaryAttack;
 
 
 public:
@@ -52,14 +69,25 @@ protected:
 	virtual void SetupPlayerInputComponent(
 		class UInputComponent* PlayerInputComponent) override;
 
+
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
+
+
+	void PrimaryInteract();
+
 
 	void PrimaryAttack();
 
 	void PrimaryAttack_TimeElapsed();
 
-	void PrimaryInteract();
+
+	void SecondaryAttack();
+
+	void SecondaryAttack_TimeElapsed();
+
+
+	FRotator GetAimRotationFromMuzzle(const FVector &MuzzleLocation, float Range = 5000.0f);
 
 };

@@ -37,7 +37,6 @@ void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-
 }
 
 
@@ -45,7 +44,6 @@ void ASCharacter::BeginPlay()
 void ASCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 
 }
 
@@ -68,6 +66,9 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->
 		BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
+
+	PlayerInputComponent->
+		BindAction("SecondaryAttack", IE_Pressed, this, &ASCharacter::SecondaryAttack);
 
 }
 
@@ -104,47 +105,34 @@ void ASCharacter::MoveRight(float Value)
 }
 
 
+void ASCharacter::PrimaryInteract()
+{
+	// We don't have to check for nullptr, because we exactly know 
+	// what is the lifetime of the owner of this particular call.
+	InteractionComp->PrimaryInteract();
+
+}
+
+
 void ASCharacter::PrimaryAttack()
 {
-	PlayAnimMontage(AttackAnim);
+	PlayAnimMontage(PrimiaryAttackAnimation);
 
 	GetWorldTimerManager().SetTimer(
 		TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, 0.15f);
 
 	// 	GetWorldTimerManager().ClearTimer(TimerHandle_PrimaryAttack);
+
 }
 
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
 	FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-
-	// TODO: Get direction from what is camera directly looking at
-	FVector Start = CameraComp->GetComponentLocation();
-	FVector End = Start + CameraComp->GetForwardVector() * 5000;
-
-	FHitResult HitResult;
-	bool bHit = GetWorld()->LineTraceSingleByProfile(HitResult, Start, End, "Projectile");
-
-	DrawDebugLineTraceSingle(
-		GetWorld(), Start, End, EDrawDebugTrace::ForDuration,
-		bHit, HitResult,
-		FLinearColor::Blue, FLinearColor::Green, 2.0f);
-
-	FRotator AimRotation;
-	if (bHit)
-	{
-		AimRotation = (HitResult.Location - RightHandLocation).Rotation();
-
-	}
-	else
-	{
-		AimRotation = CameraComp->GetComponentRotation();
-
-	}
+	FRotator AimRotation = GetAimRotationFromMuzzle(RightHandLocation);
 
 	DrawDebugLine(
-		GetWorld(), RightHandLocation, RightHandLocation + AimRotation.Vector() * 2000,
+		GetWorld(), RightHandLocation, RightHandLocation + AimRotation.Vector() * 5000,
 		FColor::Purple, false, 2.0f);
 
 	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
@@ -156,14 +144,73 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
 
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
+	GetWorld()->SpawnActor<AActor>(PrimaryProjectileClass, SpawnTransform, SpawnParams);
 
 }
 
-void ASCharacter::PrimaryInteract()
+// TODO: SecondaryAttack is ALMOST IDENTICAL to PrimaryAttack. DRY!
+// TODO: Introduce variable for secondary attack projectile class
+// TODO: change ProjectileClass to PrimaryProjectileClass?
+void ASCharacter::SecondaryAttack()
 {
-	// We don't have to check for nullptr, because we exactly know 
-	// what is the lifetime of the owner of this particular call.
-	InteractionComp->PrimaryInteract();
+	PlayAnimMontage(PrimiaryAttackAnimation);
+
+	GetWorldTimerManager().SetTimer(
+		TimerHandle_PrimaryAttack, this, &ASCharacter::SecondaryAttack_TimeElapsed, 0.15f);
+
 }
 
+
+void ASCharacter::SecondaryAttack_TimeElapsed()
+{
+	FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	FRotator AimRotation = GetAimRotationFromMuzzle(RightHandLocation);
+
+	DrawDebugLine(
+		GetWorld(), RightHandLocation, RightHandLocation + AimRotation.Vector() * 5000,
+		FColor::Purple, false, 2.0f);
+
+	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
+
+	FTransform SpawnTransform = FTransform(AimRotation, RightHandLocation);
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride =
+		ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+
+	GetWorld()->SpawnActor<AActor>(PrimaryProjectileClass, SpawnTransform, SpawnParams);
+
+}
+
+
+FRotator ASCharacter::GetAimRotationFromMuzzle(const FVector& MuzzleLocation, float Range /*= 5000.0f*/)
+{
+	FVector TraceStart = CameraComp->GetComponentLocation();
+	FVector TraceEnd = TraceStart + CameraComp->GetForwardVector() * Range;
+
+	FHitResult HitResult;
+	bool bHit =
+		GetWorld()->LineTraceSingleByProfile(HitResult, TraceStart, TraceEnd, "Projectile");
+
+	DrawDebugLineTraceSingle(
+		GetWorld(), TraceStart, TraceEnd, EDrawDebugTrace::ForDuration,
+		bHit, HitResult,
+		FLinearColor::Blue, FLinearColor::Green, 2.0f);
+
+	// 	FRotator AimRotation;
+	// 	if (bHit)
+	// 	{
+	// 		AimRotation = (HitResult.Location - MuzzleLocation).Rotation();
+	// 
+	// 	}
+	// 	else
+	// 	{
+	// 		AimRotation = (End - MuzzleLocation).Rotation();
+	// 
+	// 	}
+	// 
+	// 	return AimRotation;
+	
+	return ((bHit ? HitResult.Location : TraceEnd) - MuzzleLocation).Rotation();
+}
