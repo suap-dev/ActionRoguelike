@@ -4,16 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "SProjectileBase.h"
 #include "SMagicProjectile.generated.h"
 
 class USphereComponent;
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
 
-const float DEFAULT_PROJECTILE_LIFESPAN = 5.0;
-
 UCLASS()
-class ACTIONROGUELIKE_API ASMagicProjectile : public AActor
+class ACTIONROGUELIKE_API ASMagicProjectile : public ASProjectileBase
 {
 	GENERATED_BODY()
 
@@ -23,16 +22,16 @@ public:
 	ASMagicProjectile();
 
 protected:
-
-	// This is going to be our collision component.
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	USphereComponent* SphereComp;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UProjectileMovementComponent* MovementComp;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UParticleSystemComponent* EffectComp;
+// 
+// 	// This is going to be our collision component.
+// 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+// 	USphereComponent* SphereComp;
+// 
+// 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+// 	UProjectileMovementComponent* MovementComp;
+// 
+// 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+// 	UParticleSystemComponent* EffectComp;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,11 +40,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
-	void OnHit(
-		UPrimitiveComponent* HitComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		FVector NormalImpulse,
-		const FHitResult& Hit);
+// 	UFUNCTION()
+// 	void OnHit(
+// 		UPrimitiveComponent* HitComponent,
+// 		AActor* OtherActor,
+// 		UPrimitiveComponent* OtherComp,
+// 		FVector NormalImpulse,
+// 		const FHitResult& Hit);
 };

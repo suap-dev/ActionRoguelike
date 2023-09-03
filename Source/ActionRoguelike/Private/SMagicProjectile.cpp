@@ -3,33 +3,15 @@
 
 #include "SMagicProjectile.h"
 #include "Components/SphereComponent.h"
-#include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
 ASMagicProjectile::ASMagicProjectile()
+	: Super()
 {
-	// Set this actor to call Tick() every frame.
-	// You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
-	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComp");
-	// 	SphereComp->SetCollisionObjectType(ECC_WorldDynamic);
-	// 	SphereComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-	// 	SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-	SphereComp->SetCollisionProfileName("Projectile");
-	SphereComp->OnComponentHit.AddDynamic(this, &ASMagicProjectile::OnHit);
-	RootComponent = SphereComp;
-
-	EffectComp = CreateDefaultSubobject<UParticleSystemComponent>("EffectComp");
-	EffectComp->SetupAttachment(SphereComp);
-
-	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComp");
+// 	SphereComp->OnComponentHit.AddDynamic(this, &ASMagicProjectile::OnHit);
 	MovementComp->InitialSpeed = 1000.f;
-	MovementComp->bRotationFollowsVelocity = true;	// this happens each frame
-	MovementComp->bInitialVelocityInLocalSpace = true;
-
-	InitialLifeSpan = DEFAULT_PROJECTILE_LIFESPAN;
+	InitialLifeSpan = 5.0f;
 
 }
 
@@ -37,8 +19,6 @@ ASMagicProjectile::ASMagicProjectile()
 void ASMagicProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-
-	SphereComp->IgnoreActorWhenMoving(GetInstigator(), true);
 
 }
 
@@ -49,17 +29,17 @@ void ASMagicProjectile::Tick(float DeltaTime)
 
 }
 
-void ASMagicProjectile::OnHit(
-	UPrimitiveComponent* HitComponent,
-	AActor* OtherActor,
-	UPrimitiveComponent* OtherComp,
-	FVector NormalImpulse,
-	const FHitResult& Hit)
-{
-	check(GEngine);
-	GEngine->AddOnScreenDebugMessage(
-		-1, 15.0f, FColor::Yellow, TEXT("Projectile OnHit triggered."));
-
-	// 	Destroy();
-}
+// void ASMagicProjectile::OnHit(
+// 	UPrimitiveComponent* HitComponent,
+// 	AActor* OtherActor,
+// 	UPrimitiveComponent* OtherComp,
+// 	FVector NormalImpulse,
+// 	const FHitResult& Hit)
+// {
+// 	check(GEngine);
+// 	GEngine->AddOnScreenDebugMessage(
+// 		-1, 15.0f, FColor::Yellow, TEXT("Projectile OnHit triggered."));
+// 
+// 	// 	Destroy();
+// }
 
