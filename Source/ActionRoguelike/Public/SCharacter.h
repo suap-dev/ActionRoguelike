@@ -10,6 +10,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class USInteractionComponent;
 class UAnimMontage;
+class USAttributeComponent;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -27,6 +28,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	USInteractionComponent* InteractionComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	USAttributeComponent* AtrributeComp;
 
 
 	UPROPERTY(EditAnywhere, Category = "Attack - Primary", DisplayName = "Projectile Class")
@@ -96,7 +100,7 @@ protected:
 
 
 	void PrimaryInteract();
-	
+
 
 	void PrimaryAttack();
 
