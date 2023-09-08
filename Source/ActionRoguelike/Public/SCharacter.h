@@ -17,8 +17,7 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-protected:
-
+public:
 	// TODO: fix the UPROPERTIES
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
@@ -32,7 +31,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	USAttributeComponent* AtrributeComp;
 
-
+protected:
 	UPROPERTY(EditAnywhere, Category = "Attack - Primary", DisplayName = "Projectile Class")
 	TSubclassOf<AActor> PrimaryProjectileClass;
 
