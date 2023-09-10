@@ -97,7 +97,7 @@ void ASCharacter::MoveRight(const float Value)
 	 **/
 
 	const FVector RightVector = FRotationMatrix(ControlRot).GetScaledAxis(EAxis::Y);
-	//FVector RightVector = UKismetMathLibrary::GetRightVector(ControlRot);
+	// FVector RightVector = UKismetMathLibrary::GetRightVector(ControlRot);
 
 	AddMovementInput(RightVector, Value);
 }
@@ -210,20 +210,6 @@ FRotator ASCharacter::GetAimRotationFromMuzzle(const FVector& MuzzleLocation,
 
 	DrawDebugLineTraceSingle(GetWorld(), TraceStart, TraceEnd, EDrawDebugTrace::ForDuration, bHit, HitResult,
 	                         FLinearColor::Blue, FLinearColor::Green, 2.0f);
-
-	// 	FRotator AimRotation;
-	// 	if (bHit)
-	// 	{
-	// 		AimRotation = (HitResult.Location - MuzzleLocation).Rotation();
-	// 
-	// 	}
-	// 	else
-	// 	{
-	// 		AimRotation = (End - MuzzleLocation).Rotation();
-	// 
-	// 	}
-	// 
-	// 	return AimRotation;
 
 	return ((bHit ? HitResult.Location : TraceEnd) - MuzzleLocation).Rotation();
 }

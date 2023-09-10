@@ -30,14 +30,14 @@ public:
 	           FVector NormalImpulse,
 	           const FHitResult& Hit);
 
-	// 	UFUNCTION()
-	// 	void BeginOverlap(
-	// 		UPrimitiveComponent* OverlappedComponent,
-	// 		AActor* OtherActor,
-	// 		UPrimitiveComponent* OtherComp,
-	// 		int32 OtherBodyIndex,
-	// 		bool bFromSweep,
-	// 		const FHitResult& SweepResult);
+	// UFUNCTION()
+	// void BeginOverlap(
+	// 	UPrimitiveComponent* OverlappedComponent,
+	// 	AActor* OtherActor,
+	// 	UPrimitiveComponent* OtherComp,
+	// 	int32 OtherBodyIndex,
+	// 	bool bFromSweep,
+	// 	const FHitResult& SweepResult);
 
 	UFUNCTION()
 	void Explode() const;

@@ -14,10 +14,10 @@ ASExplosiveBarrel::ASExplosiveBarrel()
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	MeshComp->SetSimulatePhysics(true);
 	MeshComp->SetCollisionProfileName("PhysicsActor");
-	// 	MeshComp->SetCollisionProfileName("PhysicsActor");
-	// 	MeshComp->SetCollisionObjectType(ECC_PhysicsBody);
-
-	// 	MeshComp->OnComponentHit.AddDynamic(this, &ASExplosiveBarrel::OnHit);
+	// MeshComp->SetCollisionProfileName("PhysicsActor");
+	// MeshComp->SetCollisionObjectType(ECC_PhysicsBody);
+	//
+	// MeshComp->OnComponentHit.AddDynamic(this, &ASExplosiveBarrel::OnHit);
 
 	RootComponent = MeshComp;
 
@@ -26,7 +26,7 @@ ASExplosiveBarrel::ASExplosiveBarrel()
 	ForceComp->AddCollisionChannelToAffect(ECC_WorldDynamic);
 	ForceComp->ImpulseStrength = 150000.0f;
 	ForceComp->Radius = 1500.0f;
-	// 	ForceComp->bImpulseVelChange = true; // Impulse velocity scales with objects mass
+	// ForceComp->bImpulseVelChange = true; // Impulse velocity scales with objects mass
 	ForceComp->SetAutoActivate(false);
 	ForceComp->SetupAttachment(RootComponent);
 }
