@@ -22,8 +22,8 @@ ASItemChest::ASItemChest()
 void ASItemChest::Interact_Implementation(APawn* InstigatorPawn)
 {
 	check(GEngine);
-	GEngine->AddOnScreenDebugMessage(
-		-1, 15.0f, FColor::Yellow, TEXT("Chest interacted with."));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+	                                 TEXT("Chest interacted with."));
 
 	LidMesh->SetRelativeRotation(FRotator(LidOpenPitch, 0, 0));
 }
@@ -32,13 +32,10 @@ void ASItemChest::Interact_Implementation(APawn* InstigatorPawn)
 void ASItemChest::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
-void ASItemChest::Tick(float DeltaTime)
+void ASItemChest::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
-

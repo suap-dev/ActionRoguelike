@@ -14,13 +14,12 @@ UCLASS()
 class ACTIONROGUELIKE_API ASProjectileBase : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ASProjectileBase();
 
 protected:
-
 	// This is going to be our collision component.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USphereComponent* SphereComp;
@@ -37,8 +36,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 };

@@ -10,7 +10,7 @@ USAttributeComponent::USAttributeComponent()
 }
 
 
-bool USAttributeComponent::ApplyHealthChange(float Delta)
+bool USAttributeComponent::ApplyHealthChange(const float Delta)
 {
 	Health += Delta;
 

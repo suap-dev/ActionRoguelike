@@ -15,12 +15,10 @@ class ACTIONROGUELIKE_API ASItemChest : public AActor, public ISGameplayInterfac
 	GENERATED_BODY()
 
 public:
-
 	UPROPERTY(EditAnywhere, Category = "Chest")
 	float LidOpenPitch;
 
 protected:
-
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* BaseMesh;
 
@@ -32,7 +30,7 @@ public:
 	ASItemChest();
 
 
-	void Interact_Implementation(APawn* InstigatorPawn) override;
+	virtual void Interact_Implementation(APawn* InstigatorPawn) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,5 +39,4 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 };

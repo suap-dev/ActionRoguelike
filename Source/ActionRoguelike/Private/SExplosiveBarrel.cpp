@@ -29,7 +29,6 @@ ASExplosiveBarrel::ASExplosiveBarrel()
 	// 	ForceComp->bImpulseVelChange = true; // Impulse velocity scales with objects mass
 	ForceComp->SetAutoActivate(false);
 	ForceComp->SetupAttachment(RootComponent);
-
 }
 
 // this is called BEFORE BeginPlay, after the constructor.
@@ -39,25 +38,23 @@ void ASExplosiveBarrel::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	MeshComp->OnComponentHit.AddDynamic(this, &ASExplosiveBarrel::OnHit);
-
 }
 
-void ASExplosiveBarrel::OnHit(
-	UPrimitiveComponent* HitComponent,
-	AActor* OtherActor,
-	UPrimitiveComponent* OtherComp,
-	FVector NormalImpulse,
-	const FHitResult& Hit)
+void ASExplosiveBarrel::OnHit(UPrimitiveComponent* HitComponent,
+                              AActor* OtherActor,
+                              UPrimitiveComponent* OtherComp,
+                              FVector NormalImpulse,
+                              const FHitResult& Hit)
 {
 	Explode();
 	Destroy();
 }
 
-void ASExplosiveBarrel::Explode()
+void ASExplosiveBarrel::Explode() const
 {
 	check(GEngine);
-	GEngine->AddOnScreenDebugMessage(
-		-1, 15.0f, FColor::Yellow, TEXT("Barrel exploded!"));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+	                                 TEXT("Barrel exploded!"));
 
 	ForceComp->FireImpulse();
 }
@@ -66,13 +63,10 @@ void ASExplosiveBarrel::Explode()
 void ASExplosiveBarrel::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
-void ASExplosiveBarrel::Tick(float DeltaTime)
+void ASExplosiveBarrel::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
-

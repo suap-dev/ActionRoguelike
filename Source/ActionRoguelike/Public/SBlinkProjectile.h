@@ -16,10 +16,10 @@ class ACTIONROGUELIKE_API ASBlinkProjectile : public ASProjectileBase
 
 public:
 	ASBlinkProjectile();
-	
+
 protected:
- 	UPROPERTY(EditDefaultsOnly)
- 	UParticleSystemComponent* ExplosionEffectComp;
+	UPROPERTY(EditDefaultsOnly)
+	UParticleSystemComponent* ExplosionEffectComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float ExplosionDelay = 0.4f;
@@ -31,21 +31,18 @@ protected:
 
 	FTimerHandle TimerHandle_Teleport;
 
- 	void PostInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
 
 	virtual void BeginPlay() override;
 
 	void Explode();
 
 	void Teleport();
- 
+
 	UFUNCTION()
- 	void OnHit(
- 		UPrimitiveComponent* HitComponent,
- 		AActor* OtherActor,
- 		UPrimitiveComponent* OtherComp,
- 		FVector NormalImpulse,
- 		const FHitResult& Hit);
-
+	void OnHit(UPrimitiveComponent* HitComponent,
+	           AActor* OtherActor,
+	           UPrimitiveComponent* OtherComp,
+	           FVector NormalImpulse,
+	           const FHitResult& Hit);
 };
-

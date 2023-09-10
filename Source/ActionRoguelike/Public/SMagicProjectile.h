@@ -24,18 +24,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	UParticleSystemComponent* ExplosionEffectComp;
 
-	void PostInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float Damage = 20.0f;
 
 	UFUNCTION(BlueprintCallable)
-	void OnActorOverlap(
-		UPrimitiveComponent* OverlappedComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex,
-		bool bFromSweep,
-		const FHitResult& SweepResult);
+	void OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
+	                    AActor* OtherActor,
+	                    UPrimitiveComponent* OtherComp,
+	                    int32 OtherBodyIndex,
+	                    bool bFromSweep,
+	                    const FHitResult& SweepResult);
 };

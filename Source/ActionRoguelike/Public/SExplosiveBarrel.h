@@ -20,17 +20,15 @@ class ACTIONROGUELIKE_API ASExplosiveBarrel : public AActor
 	URadialForceComponent* ForceComp;
 
 public:
-
 	// Sets default values for this actor's properties
 	ASExplosiveBarrel();
 
 	UFUNCTION()
-	void OnHit(
-		UPrimitiveComponent* HitComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		FVector NormalImpulse,
-		const FHitResult& Hit);
+	void OnHit(UPrimitiveComponent* HitComponent,
+	           AActor* OtherActor,
+	           UPrimitiveComponent* OtherComp,
+	           FVector NormalImpulse,
+	           const FHitResult& Hit);
 
 	// 	UFUNCTION()
 	// 	void BeginOverlap(
@@ -42,7 +40,7 @@ public:
 	// 		const FHitResult& SweepResult);
 
 	UFUNCTION()
-	void Explode();
+	void Explode() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -52,6 +50,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void PostInitializeComponents() override;
-
+	virtual void PostInitializeComponents() override;
 };

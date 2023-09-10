@@ -24,14 +24,13 @@ ASCharacter::ASCharacter()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
 
-	AtrributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComp");
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComp");
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	bUseControllerRotationYaw = false;
 
 	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComp");
-
 }
 
 
@@ -39,15 +38,13 @@ ASCharacter::ASCharacter()
 void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 
 // Called every frame
-void ASCharacter::Tick(float DeltaTime)
+void ASCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 
@@ -65,34 +62,28 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
 
-	PlayerInputComponent->
-		BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
+	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
 
 
-	PlayerInputComponent->
-		BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
+	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 
-	PlayerInputComponent->
-		BindAction("SecondaryAttack", IE_Pressed, this, &ASCharacter::SecondaryAttack);
+	PlayerInputComponent->BindAction("SecondaryAttack", IE_Pressed, this, &ASCharacter::SecondaryAttack);
 
-	PlayerInputComponent->
-		BindAction("TertiaryAttack", IE_Pressed, this, &ASCharacter::TertiaryAttack);
-
+	PlayerInputComponent->BindAction("TertiaryAttack", IE_Pressed, this, &ASCharacter::TertiaryAttack);
 }
 
 
-void ASCharacter::MoveForward(float Value)
+void ASCharacter::MoveForward(const float Value)
 {
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Pitch = 0.0f;
 	ControlRot.Roll = 0.0f;
 
 	AddMovementInput(ControlRot.Vector(), Value);
-
 }
 
 
-void ASCharacter::MoveRight(float Value)
+void ASCharacter::MoveRight(const float Value)
 {
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Pitch = 0.0f;
@@ -105,11 +96,10 @@ void ASCharacter::MoveRight(float Value)
 	 *
 	 **/
 
-	FVector RightVector = FRotationMatrix(ControlRot).GetScaledAxis(EAxis::Y);
+	const FVector RightVector = FRotationMatrix(ControlRot).GetScaledAxis(EAxis::Y);
 	//FVector RightVector = UKismetMathLibrary::GetRightVector(ControlRot);
 
 	AddMovementInput(RightVector, Value);
-
 }
 
 
@@ -118,43 +108,36 @@ void ASCharacter::PrimaryInteract()
 	// We don't have to check for nullptr, because we exactly know 
 	// what is the lifetime of the owner of this particular call.
 	InteractionComp->PrimaryInteract();
-
 }
-
 
 
 void ASCharacter::PrimaryAttack()
 {
-	PlayAnimMontage(PrimiaryAttackAnimation);
+	PlayAnimMontage(PrimaryAttackAnimation);
 
-	GetWorldTimerManager().SetTimer(
-		TimerHandle_PrimaryAttack, this,
-		&ASCharacter::PrimaryAttack_TimeElapsed, PrimaryAttackFireDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this,
+	                                &ASCharacter::PrimaryAttack_TimeElapsed, PrimaryAttackFireDelay);
 }
 
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
-	FVector MuzzleLocation = GetMesh()->GetSocketLocation(PrimaryAttackMuzzleName);
-	FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
+	const FVector MuzzleLocation = GetMesh()->GetSocketLocation(PrimaryAttackMuzzleName);
+	const FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
 
-	DrawDebugLine(
-		GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
-		FColor::Purple, false, 2.0f);
+	DrawDebugLine(GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
+	              FColor::Purple, false, 2.0f);
 
 	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
 
-	FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
+	const FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
 
 	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride =
-		ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
 
 	GetWorld()->SpawnActor<AActor>(PrimaryProjectileClass, SpawnTransform, SpawnParams);
-
 }
-
 
 
 // TODO: SecondaryAttack is ALMOST IDENTICAL to PrimaryAttack. DRY!
@@ -163,32 +146,28 @@ void ASCharacter::SecondaryAttack()
 {
 	PlayAnimMontage(SecondaryAttackAnimation);
 
-	GetWorldTimerManager().SetTimer(
-		TimerHandle_SecondaryAttack, this,
-		&ASCharacter::SecondaryAttack_TimeElapsed, SecondaryAttackFireDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_SecondaryAttack, this,
+	                                &ASCharacter::SecondaryAttack_TimeElapsed, SecondaryAttackFireDelay);
 }
 
 
 void ASCharacter::SecondaryAttack_TimeElapsed()
 {
-	FVector MuzzleLocation = GetMesh()->GetSocketLocation(SecondaryAttackMuzzleName);
-	FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
+	const FVector MuzzleLocation = GetMesh()->GetSocketLocation(SecondaryAttackMuzzleName);
+	const FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
 
-	DrawDebugLine(
-		GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
-		FColor::Purple, false, 2.0f);
+	DrawDebugLine(GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
+	              FColor::Purple, false, 2.0f);
 
 	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
 
-	FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
+	const FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
 
 	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride =
-		ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
 
 	GetWorld()->SpawnActor<AActor>(SecondaryProjectileClass, SpawnTransform, SpawnParams);
-
 }
 
 
@@ -196,47 +175,41 @@ void ASCharacter::TertiaryAttack()
 {
 	PlayAnimMontage(TertiaryAttackAnimation);
 
-	GetWorldTimerManager().SetTimer(
-		TimerHandle_TertiaryAttack, this,
-		&ASCharacter::TertiaryAttack_TimeElapsed, TertiaryAttackFireDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_TertiaryAttack, this,
+	                                &ASCharacter::TertiaryAttack_TimeElapsed, TertiaryAttackFireDelay);
 }
 
 
 void ASCharacter::TertiaryAttack_TimeElapsed()
 {
-	FVector MuzzleLocation = GetMesh()->GetSocketLocation(TertiaryAttackMuzzleName);
-	FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
+	const FVector MuzzleLocation = GetMesh()->GetSocketLocation(TertiaryAttackMuzzleName);
+	const FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
 
-	DrawDebugLine(
-		GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
-		FColor::Purple, false, 2.0f);
+	DrawDebugLine(GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
+	              FColor::Purple, false, 2.0f);
 
 	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
 
-	FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
+	const FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
 
 	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride =
-		ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
 
 	GetWorld()->SpawnActor<AActor>(TertiaryProjectileClass, SpawnTransform, SpawnParams);
-
 }
 
-FRotator ASCharacter::GetAimRotationFromMuzzle(const FVector& MuzzleLocation, float Range /*= 5000.0f*/)
+FRotator ASCharacter::GetAimRotationFromMuzzle(const FVector& MuzzleLocation,
+                                               const float Range /*= 5000.0f*/) const
 {
-	FVector TraceStart = CameraComp->GetComponentLocation();
-	FVector TraceEnd = TraceStart + CameraComp->GetForwardVector() * Range;
+	const FVector TraceStart = CameraComp->GetComponentLocation();
+	const FVector TraceEnd = TraceStart + CameraComp->GetForwardVector() * Range;
 
 	FHitResult HitResult;
-	bool bHit =
-		GetWorld()->LineTraceSingleByProfile(HitResult, TraceStart, TraceEnd, "Projectile");
+	const bool bHit = GetWorld()->LineTraceSingleByProfile(HitResult, TraceStart, TraceEnd, "Projectile");
 
-	DrawDebugLineTraceSingle(
-		GetWorld(), TraceStart, TraceEnd, EDrawDebugTrace::ForDuration,
-		bHit, HitResult,
-		FLinearColor::Blue, FLinearColor::Green, 2.0f);
+	DrawDebugLineTraceSingle(GetWorld(), TraceStart, TraceEnd, EDrawDebugTrace::ForDuration, bHit, HitResult,
+	                         FLinearColor::Blue, FLinearColor::Green, 2.0f);
 
 	// 	FRotator AimRotation;
 	// 	if (bHit)

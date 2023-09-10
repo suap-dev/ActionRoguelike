@@ -6,13 +6,11 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
-ASBlinkProjectile::ASBlinkProjectile() : Super()
+ASBlinkProjectile::ASBlinkProjectile()
 {
-	ExplosionEffectComp =
-		CreateDefaultSubobject<UParticleSystemComponent>("ExplosionEffectComp");
+	ExplosionEffectComp = CreateDefaultSubobject<UParticleSystemComponent>("ExplosionEffectComp");
 	ExplosionEffectComp->SetupAttachment(RootComponent);
 	ExplosionEffectComp->SetAutoActivate(false);
-
 }
 
 
@@ -22,7 +20,6 @@ void ASBlinkProjectile::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	SphereComp->OnComponentHit.AddDynamic(this, &ASBlinkProjectile::OnHit);
-
 }
 
 
@@ -30,10 +27,8 @@ void ASBlinkProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(
-		TimerHandle_Explosion, this,
-		&ASBlinkProjectile::Explode, ExplosionDelay);
-
+	GetWorldTimerManager().SetTimer(TimerHandle_Explosion, this,
+	                                &ASBlinkProjectile::Explode, ExplosionDelay);
 }
 
 
@@ -42,10 +37,8 @@ void ASBlinkProjectile::Explode()
 	MovementComp->StopMovementImmediately();
 	ExplosionEffectComp->Activate(true);
 
-	GetWorldTimerManager().SetTimer(
-		TimerHandle_Teleport, this,
-		&ASBlinkProjectile::Teleport, TeleportDelay);
-
+	GetWorldTimerManager().SetTimer(TimerHandle_Teleport, this,
+	                                &ASBlinkProjectile::Teleport, TeleportDelay);
 }
 
 
@@ -54,14 +47,13 @@ void ASBlinkProjectile::Teleport()
 	UE_LOG(LogTemp, Log, TEXT("BLINK!"));
 	GetInstigator()->SetActorLocation(GetActorLocation());
 	Destroy();
-
 }
 
 
-void ASBlinkProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ASBlinkProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+                              FVector NormalImpulse, const FHitResult& Hit)
 {
 	UE_LOG(LogTemp, Log, TEXT("Hit."));
 	GetWorldTimerManager().ClearTimer(TimerHandle_Explosion);
 	Explode();
-
 }

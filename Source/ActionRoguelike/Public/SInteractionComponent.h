@@ -7,16 +7,14 @@
 #include "SInteractionComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ACTIONROGUELIKE_API USInteractionComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
-	
-	void PrimaryInteract();
+	void PrimaryInteract() const;
 
-public:
 	// Sets default values for this component's properties
 	USInteractionComponent();
 
@@ -24,9 +22,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 };

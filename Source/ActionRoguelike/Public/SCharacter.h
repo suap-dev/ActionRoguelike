@@ -18,7 +18,7 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// TODO: fix the UPROPERTIES
+	// TODO: fix the U_PROPERTIES
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
@@ -29,14 +29,14 @@ public:
 	USInteractionComponent* InteractionComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
-	USAttributeComponent* AtrributeComp;
+	USAttributeComponent* AttributeComp;
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Attack - Primary", DisplayName = "Projectile Class")
 	TSubclassOf<AActor> PrimaryProjectileClass;
 
 	UPROPERTY(EditAnywhere, Category = "Attack - Primary", DisplayName = "Attack Animation")
-	UAnimMontage* PrimiaryAttackAnimation;
+	UAnimMontage* PrimaryAttackAnimation;
 
 	UPROPERTY(EditAnywhere, Category = "Attack - Primary", DisplayName = "Fire Delay")
 	float PrimaryAttackFireDelay;
@@ -81,7 +81,6 @@ public:
 	ASCharacter();
 
 protected:
-
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -89,8 +88,7 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(
-		class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
 	void MoveForward(float Value);
@@ -116,6 +114,5 @@ protected:
 	void TertiaryAttack_TimeElapsed();
 
 
-	FRotator GetAimRotationFromMuzzle(const FVector& MuzzleLocation, float Range = 5000.0f);
-
+	FRotator GetAimRotationFromMuzzle(const FVector& MuzzleLocation, float Range = 5000.0f) const;
 };
