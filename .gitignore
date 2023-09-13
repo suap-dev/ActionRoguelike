@@ -76,3 +76,4 @@ DerivedDataCache/*
 # Idea and RiderLink
 .idea/*
 Plugins/*/RiderLink/*
+Plugins/*/WakaTimeForUE/*
