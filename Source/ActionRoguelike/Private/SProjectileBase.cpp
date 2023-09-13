@@ -9,14 +9,7 @@
 // Sets default values
 ASProjectileBase::ASProjectileBase()
 {
-	// Set this actor to call Tick() every frame.
-	// You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComp");
-	// SphereComp->SetCollisionObjectType(ECC_WorldDynamic);
-	// SphereComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-	// SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	SphereComp->SetCollisionProfileName("Projectile");
 	RootComponent = SphereComp;
 
@@ -26,21 +19,9 @@ ASProjectileBase::ASProjectileBase()
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComp");
 	MovementComp->bRotationFollowsVelocity = true; // this happens each frame
 	MovementComp->bInitialVelocityInLocalSpace = true;
-
-	MovementComp->InitialSpeed = InitialSpeed; // default is set in header
-	InitialLifeSpan = 5.0f;
-
 	MovementComp->ProjectileGravityScale = 0.0f;
-}
+	MovementComp->InitialSpeed = InitialSpeed; // default is set in header
 
-// Called when the game starts or when spawned
-void ASProjectileBase::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-// Called every frame
-void ASProjectileBase::Tick(const float DeltaTime)
-{
-	Super::Tick(DeltaTime);
+	constexpr float MaxRange = 10000.0f;
+	InitialLifeSpan = MaxRange / InitialSpeed;
 }
