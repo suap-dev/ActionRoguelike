@@ -42,9 +42,22 @@ public:
 	UFUNCTION()
 	void Explode() const;
 
+	UFUNCTION()
+	void Destroy();
+
+	UFUNCTION()
+	void StartDissolving();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	FTimerHandle TimerHandle_Explosion;
+
+	FTimerHandle TimerHandle_Destruction;
+
+	bool bIsDissolving;
+	float DissolutionBeginTime;
 
 public:
 	// Called every frame

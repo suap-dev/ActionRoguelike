@@ -46,8 +46,12 @@ void ASExplosiveBarrel::OnHit(UPrimitiveComponent* HitComponent,
                               FVector NormalImpulse,
                               const FHitResult& Hit)
 {
-	Explode();
-	Destroy();
+	StartDissolving();
+	GetWorldTimerManager().SetTimer(TimerHandle_Explosion, this,
+	                                &ASExplosiveBarrel::Explode, 0.05f);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_Destruction, this,
+	                                &ASExplosiveBarrel::Destroy, 1.0f);
 }
 
 void ASExplosiveBarrel::Explode() const
@@ -57,6 +61,18 @@ void ASExplosiveBarrel::Explode() const
 	                                 TEXT("Barrel exploded!"));
 
 	ForceComp->FireImpulse();
+}
+
+void ASExplosiveBarrel::Destroy()
+{
+	Super::Destroy();
+}
+
+void ASExplosiveBarrel::StartDissolving()
+{
+	bIsDissolving = true;
+	DissolutionBeginTime = GetWorld()->TimeSeconds;
+	MeshComp->SetScalarParameterValueOnMaterials("EmissionStrength", 8.0f);
 }
 
 // Called when the game starts or when spawned
@@ -69,4 +85,9 @@ void ASExplosiveBarrel::BeginPlay()
 void ASExplosiveBarrel::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (bIsDissolving)
+	{
+		const float DissolveAmount = GetWorld()->TimeSeconds - DissolutionBeginTime;
+		MeshComp->SetScalarParameterValueOnMaterials("DissolveAmount", DissolveAmount);
+	}
 }
