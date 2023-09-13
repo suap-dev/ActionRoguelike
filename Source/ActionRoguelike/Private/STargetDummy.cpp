@@ -21,6 +21,6 @@ void ASTargetDummy::OnHealthChanged(AActor* InstigatorActor, USAttributeComponen
 	// We don't check for null, because we created it in the constructor. It's not a function parameter.
 	if (Delta < 0.0f)
 	{
-		MeshComp->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds);
+		MeshComp->SetScalarParameterValueOnMaterials("HitTime", GetWorld()->TimeSeconds);
 	}
 }
