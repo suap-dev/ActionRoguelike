@@ -41,13 +41,15 @@ void ASProjectileBase::SpawnExplosionEmitter()
 void ASProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                              FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Log, TEXT("ProjectileBase -> Hit"));
+	UE_LOG(LogTemp, Log, TEXT("%s"), *FString(__FUNCTION__));
+	
 	Explode();
 }
 
 void ASProjectileBase::Explode_Implementation()
 {
-	UE_LOG(LogTemp, Log, TEXT("ProjectileBase -> Exploded."));
+	UE_LOG(LogTemp, Log, TEXT("%s"), *FString(__FUNCTION__));
+	
 	SpawnExplosionEmitter();
 
 	Destroy();

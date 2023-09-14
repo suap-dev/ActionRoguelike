@@ -2,9 +2,8 @@
 
 
 #include "SBlinkProjectile.h"
-#include "Components/SphereComponent.h"
-#include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 ASBlinkProjectile::ASBlinkProjectile()
 {
@@ -16,10 +15,7 @@ ASBlinkProjectile::ASBlinkProjectile()
 
 void ASBlinkProjectile::PostInitializeComponents()
 {
-	// Remember to call the parent function!
 	Super::PostInitializeComponents();
-
-	// SphereComp->OnComponentHit.AddDynamic(this, &ASBlinkProjectile::OnHit);
 }
 
 
@@ -34,19 +30,25 @@ void ASBlinkProjectile::BeginPlay()
 
 void ASBlinkProjectile::MaxRangeReached()
 {
-	UE_LOG(LogTemp, Log, TEXT("BlinkProjectile -> MaxRangeReached"));
+	UE_LOG(LogTemp, Log, TEXT("%s"), *FString(__FUNCTION__));
 
 	MovementComp->StopMovementImmediately();
+	Explode();
+}
 
+void ASBlinkProjectile::Explode_Implementation()
+{
+	UE_LOG(LogTemp, Log, TEXT("%s"), *FString(__FUNCTION__));
+	
 	SpawnExplosionEmitter();
 	GetWorldTimerManager().SetTimer(TimerHandle_TeleportInstigator, this,
-	                                &ASBlinkProjectile::TeleportInstigator, TeleportDelay);
+									&ASBlinkProjectile::TeleportInstigator, TeleportDelay);
 }
 
 
 void ASBlinkProjectile::TeleportInstigator()
 {
-	UE_LOG(LogTemp, Log, TEXT("BlinkProjectile -> InstigatorTeleported"));
+	UE_LOG(LogTemp, Log, TEXT("%s"), *FString(__FUNCTION__));
 
 	GetInstigator()->SetActorLocation(GetActorLocation());
 	Destroy();
@@ -56,11 +58,8 @@ void ASBlinkProjectile::TeleportInstigator()
 void ASBlinkProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                               FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Log, TEXT("BlinkProjectile -> Hit"));
+	UE_LOG(LogTemp, Log, TEXT("%s"), *FString(__FUNCTION__));
 
 	GetWorldTimerManager().ClearTimer(TimerHandle_MaxRangeReached);
-
-	SpawnExplosionEmitter();
-	GetWorldTimerManager().SetTimer(TimerHandle_TeleportInstigator, this,
-	                                &ASBlinkProjectile::TeleportInstigator, TeleportDelay);
+	Explode();
 }

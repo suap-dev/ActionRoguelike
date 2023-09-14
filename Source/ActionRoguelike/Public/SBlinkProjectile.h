@@ -34,6 +34,8 @@ protected:
 
 	void MaxRangeReached();
 
+	virtual void Explode_Implementation() override;
+
 	void TeleportInstigator();
 
 	virtual void OnHit(UPrimitiveComponent* HitComponent,

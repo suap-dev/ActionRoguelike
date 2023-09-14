@@ -19,13 +19,21 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
                                        bool bFromSweep,
                                        const FHitResult& SweepResult)
 {
+	UE_LOG(LogTemp, Log, TEXT("%s"), *FString(__FUNCTION__));
+
 	if (OtherActor && OtherActor != GetInstigator())
 	{
 		// We cast because GetComponentByClass returns generic *UActorComponent
 		if (USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(
 			OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
 		{
+			UE_LOG(LogTemp, Log, TEXT("Done %.1f damage"), Damage);
+
 			AttributeComp->ApplyHealthChange(-Damage);
 		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("No attribute component, no damage done."));
 	}
 }
