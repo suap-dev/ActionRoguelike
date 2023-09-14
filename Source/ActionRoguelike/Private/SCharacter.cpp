@@ -103,6 +103,7 @@ void ASCharacter::MoveRight(const float Value)
 }
 
 
+// ReSharper disable once CppMemberFunctionMayBeConst
 void ASCharacter::PrimaryInteract()
 {
 	// We don't have to check for nullptr, because we exactly know 

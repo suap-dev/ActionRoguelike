@@ -40,11 +40,11 @@ void ASExplosiveBarrel::PostInitializeComponents()
 	MeshComp->OnComponentHit.AddDynamic(this, &ASExplosiveBarrel::OnHit);
 }
 
-void ASExplosiveBarrel::OnHit(UPrimitiveComponent* HitComponent,
-                              AActor* OtherActor,
-                              UPrimitiveComponent* OtherComp,
-                              FVector NormalImpulse,
-                              const FHitResult& Hit)
+void ASExplosiveBarrel::OnHit([[maybe_unused]] UPrimitiveComponent* HitComponent,
+                              [[maybe_unused]] AActor* OtherActor,
+                              [[maybe_unused]] UPrimitiveComponent* OtherComp,
+                              [[maybe_unused]] FVector NormalImpulse,
+                              [[maybe_unused]] const FHitResult& Hit)
 {
 	StartDissolving();
 	GetWorldTimerManager().SetTimer(TimerHandle_Explosion, this,

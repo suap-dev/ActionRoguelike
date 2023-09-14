@@ -12,12 +12,14 @@ void ASMagicProjectile::PostInitializeComponents()
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ASMagicProjectile::OnActorOverlap);
 }
 
-void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
+// TODO: Why is OnHit not triggering when OnOverlap is. ? :|
+// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
+void ASMagicProjectile::OnActorOverlap([[maybe_unused]] UPrimitiveComponent* OverlappedComponent,
                                        AActor* OtherActor,
-                                       UPrimitiveComponent* OtherComp,
-                                       int32 OtherBodyIndex,
-                                       bool bFromSweep,
-                                       const FHitResult& SweepResult)
+                                       [[maybe_unused]] UPrimitiveComponent* OtherComp,
+                                       [[maybe_unused]] int32 OtherBodyIndex,
+                                       [[maybe_unused]] bool bFromSweep,
+                                       [[maybe_unused]] const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Log, TEXT("%s"), *FString(__FUNCTION__));
 
