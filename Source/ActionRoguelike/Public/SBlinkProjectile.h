@@ -6,9 +6,6 @@
 #include "SProjectileBase.h"
 #include "SBlinkProjectile.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class ACTIONROGUELIKE_API ASBlinkProjectile : public ASProjectileBase
 {
@@ -22,27 +19,26 @@ protected:
 	UParticleSystemComponent* ExplosionEffectComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	float ExplosionDelay = 0.4f;
+	float TravelTime = 0.4f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float TeleportDelay = 0.15f;
 
-	FTimerHandle TimerHandle_Explosion;
+	FTimerHandle TimerHandle_MaxRangeReached;
 
-	FTimerHandle TimerHandle_Teleport;
+	FTimerHandle TimerHandle_TeleportInstigator;
 
 	virtual void PostInitializeComponents() override;
 
 	virtual void BeginPlay() override;
 
-	void Explode();
+	void MaxRangeReached();
 
-	void Teleport();
+	void TeleportInstigator();
 
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent,
-	           AActor* OtherActor,
-	           UPrimitiveComponent* OtherComp,
-	           FVector NormalImpulse,
-	           const FHitResult& Hit);
+	virtual void OnHit(UPrimitiveComponent* HitComponent,
+	                   AActor* OtherActor,
+	                   UPrimitiveComponent* OtherComp,
+	                   FVector NormalImpulse,
+	                   const FHitResult& Hit) override;
 };

@@ -19,7 +19,7 @@ void ASBlinkProjectile::PostInitializeComponents()
 	// Remember to call the parent function!
 	Super::PostInitializeComponents();
 
-	SphereComp->OnComponentHit.AddDynamic(this, &ASBlinkProjectile::OnHit);
+	// SphereComp->OnComponentHit.AddDynamic(this, &ASBlinkProjectile::OnHit);
 }
 
 
@@ -27,24 +27,27 @@ void ASBlinkProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(TimerHandle_Explosion, this,
-	                                &ASBlinkProjectile::Explode, ExplosionDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_MaxRangeReached, this,
+	                                &ASBlinkProjectile::MaxRangeReached, TravelTime);
 }
 
 
-void ASBlinkProjectile::Explode()
+void ASBlinkProjectile::MaxRangeReached()
 {
+	UE_LOG(LogTemp, Log, TEXT("BlinkProjectile -> MaxRangeReached"));
+
 	MovementComp->StopMovementImmediately();
-	ExplosionEffectComp->Activate(true);
 
-	GetWorldTimerManager().SetTimer(TimerHandle_Teleport, this,
-	                                &ASBlinkProjectile::Teleport, TeleportDelay);
+	SpawnExplosionEmitter();
+	GetWorldTimerManager().SetTimer(TimerHandle_TeleportInstigator, this,
+	                                &ASBlinkProjectile::TeleportInstigator, TeleportDelay);
 }
 
 
-void ASBlinkProjectile::Teleport()
+void ASBlinkProjectile::TeleportInstigator()
 {
-	UE_LOG(LogTemp, Log, TEXT("BLINK!"));
+	UE_LOG(LogTemp, Log, TEXT("BlinkProjectile -> InstigatorTeleported"));
+
 	GetInstigator()->SetActorLocation(GetActorLocation());
 	Destroy();
 }
@@ -53,7 +56,11 @@ void ASBlinkProjectile::Teleport()
 void ASBlinkProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                               FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Log, TEXT("Hit."));
-	GetWorldTimerManager().ClearTimer(TimerHandle_Explosion);
-	Explode();
+	UE_LOG(LogTemp, Log, TEXT("BlinkProjectile -> Hit"));
+
+	GetWorldTimerManager().ClearTimer(TimerHandle_MaxRangeReached);
+
+	SpawnExplosionEmitter();
+	GetWorldTimerManager().SetTimer(TimerHandle_TeleportInstigator, this,
+	                                &ASBlinkProjectile::TeleportInstigator, TeleportDelay);
 }

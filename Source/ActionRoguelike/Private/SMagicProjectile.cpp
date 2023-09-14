@@ -2,18 +2,8 @@
 
 
 #include "SMagicProjectile.h"
-#include "Components/SphereComponent.h"
 #include "SAttributeComponent.h"
-#include "Particles/ParticleSystemComponent.h"
-#include "Kismet/GameplayStatics.h"
-
-
-ASMagicProjectile::ASMagicProjectile()
-{
-	ExplosionEffectComp = CreateDefaultSubobject<UParticleSystemComponent>("ExplosionEffectComp");
-	ExplosionEffectComp->SetupAttachment(RootComponent);
-	ExplosionEffectComp->SetAutoActivate(false);
-}
+#include "Components/SphereComponent.h"
 
 void ASMagicProjectile::PostInitializeComponents()
 {
@@ -22,7 +12,6 @@ void ASMagicProjectile::PostInitializeComponents()
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ASMagicProjectile::OnActorOverlap);
 }
 
-// TODO: Figure out when and if I want to distinct between OnOverlap and OnHit
 void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
                                        AActor* OtherActor,
                                        UPrimitiveComponent* OtherComp,
@@ -32,14 +21,11 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 {
 	if (OtherActor && OtherActor != GetInstigator())
 	{
-		// we cast because GetComponentByClass returns generic *UActorComponent
+		// We cast because GetComponentByClass returns generic *UActorComponent
 		if (USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(
 			OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
 		{
 			AttributeComp->ApplyHealthChange(-Damage);
 		}
-
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionEffectComp->Template, GetActorTransform());
-		Destroy();
 	}
 }

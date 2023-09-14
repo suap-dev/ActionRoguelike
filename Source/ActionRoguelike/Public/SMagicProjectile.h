@@ -6,24 +6,12 @@
 #include "SProjectileBase.h"
 #include "SMagicProjectile.generated.h"
 
-// class UParticleSystemComponent;
-
-/**
- *
- */
-
 UCLASS()
 class ACTIONROGUELIKE_API ASMagicProjectile : public ASProjectileBase
 {
 	GENERATED_BODY()
 
-public:
-	ASMagicProjectile();
-
 protected:
-	UPROPERTY(EditDefaultsOnly)
-	UParticleSystemComponent* ExplosionEffectComp;
-
 	virtual void PostInitializeComponents() override;
 
 public:

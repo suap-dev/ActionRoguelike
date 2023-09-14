@@ -16,11 +16,9 @@ class ACTIONROGUELIKE_API ASProjectileBase : public AActor
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	ASProjectileBase();
 
 protected:
-	// This is going to be our collision component.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USphereComponent* SphereComp;
 
@@ -30,6 +28,22 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UParticleSystemComponent* EffectComp;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UParticleSystem* ExplodeEffect;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float InitialSpeed = 4000.0f;
+
+	UFUNCTION()
+	virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	                   FVector NormalImpulse, const FHitResult& Hit);
+
+	// BlueprintNativeEvent = C++ base implementation; can be expanded in Blueprint
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Explode();
+
+	virtual void PostInitializeComponents() override;
+
+	UFUNCTION(BlueprintCallable)
+	void SpawnExplosionEmitter();
 };
