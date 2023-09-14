@@ -26,8 +26,6 @@ protected:
 
 	FTimerHandle TimerHandle_MaxRangeReached;
 
-	FTimerHandle TimerHandle_TeleportInstigator;
-
 	virtual void PostInitializeComponents() override;
 
 	virtual void BeginPlay() override;
@@ -36,11 +34,5 @@ protected:
 
 	virtual void Explode_Implementation() override;
 
-	void TeleportInstigator();
-
-	virtual void OnHit(UPrimitiveComponent* HitComponent,
-	                   AActor* OtherActor,
-	                   UPrimitiveComponent* OtherComp,
-	                   FVector NormalImpulse,
-	                   const FHitResult& Hit) override;
+	void TeleportInstigator() const;
 };
