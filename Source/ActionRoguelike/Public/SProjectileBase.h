@@ -45,5 +45,5 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 	UFUNCTION(BlueprintCallable)
-	void SpawnExplosionEmitter();
+	void SpawnExplosionEmitter() const;
 };

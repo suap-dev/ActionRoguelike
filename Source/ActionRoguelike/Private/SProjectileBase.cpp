@@ -33,7 +33,7 @@ void ASProjectileBase::PostInitializeComponents()
 	SphereComp->OnComponentHit.AddDynamic(this, &ASProjectileBase::OnHit);
 }
 
-void ASProjectileBase::SpawnExplosionEmitter()
+void ASProjectileBase::SpawnExplosionEmitter() const
 {
 	UGameplayStatics::SpawnEmitterAtLocation(this, ExplodeEffect, GetActorLocation(), GetActorRotation());
 }
@@ -42,14 +42,14 @@ void ASProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
                              FVector NormalImpulse, const FHitResult& Hit)
 {
 	UE_LOG(LogTemp, Log, TEXT("%s"), *FString(__FUNCTION__));
-	
+
 	Explode();
 }
 
 void ASProjectileBase::Explode_Implementation()
 {
 	UE_LOG(LogTemp, Log, TEXT("%s"), *FString(__FUNCTION__));
-	
+
 	SpawnExplosionEmitter();
 
 	Destroy();
