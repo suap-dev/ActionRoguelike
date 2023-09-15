@@ -90,29 +90,21 @@ protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
 	void MoveForward(float Value);
-
 	void MoveRight(float Value);
-
 
 	void PrimaryInteract();
 
-
 	void PrimaryAttack();
-
 	void PrimaryAttack_TimeElapsed();
 
-
 	void SecondaryAttack();
-
 	void SecondaryAttack_TimeElapsed();
 
-
 	void TertiaryAttack();
-
 	void TertiaryAttack_TimeElapsed();
 
+	void SpawnProjectile(const FVector& MuzzleLocation, TSubclassOf<AActor> ProjectileClass);
 
 	FRotator GetAimRotationFromMuzzle(const FVector& MuzzleLocation, float Range = 5000.0f) const;
 };

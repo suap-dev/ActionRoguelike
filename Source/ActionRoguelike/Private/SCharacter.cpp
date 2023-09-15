@@ -61,14 +61,10 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
-
 	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
 
-
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
-
 	PlayerInputComponent->BindAction("SecondaryAttack", IE_Pressed, this, &ASCharacter::SecondaryAttack);
-
 	PlayerInputComponent->BindAction("TertiaryAttack", IE_Pressed, this, &ASCharacter::TertiaryAttack);
 }
 
@@ -116,59 +112,27 @@ void ASCharacter::PrimaryAttack()
 {
 	PlayAnimMontage(PrimaryAttackAnimation);
 
-	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this,
-	                                &ASCharacter::PrimaryAttack_TimeElapsed, PrimaryAttackFireDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed,
+	                                PrimaryAttackFireDelay);
 }
-
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
-	const FVector MuzzleLocation = GetMesh()->GetSocketLocation(PrimaryAttackMuzzleName);
-	const FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
-
-	DrawDebugLine(GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
-	              FColor::Purple, false, 2.0f);
-
-	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
-
-	const FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
-
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-
-	GetWorld()->SpawnActor<AActor>(PrimaryProjectileClass, SpawnTransform, SpawnParams);
+	SpawnProjectile(GetMesh()->GetSocketLocation(PrimaryAttackMuzzleName), PrimaryProjectileClass);
 }
 
 
-// TODO: SecondaryAttack is ALMOST IDENTICAL to PrimaryAttack. DRY!
-// TODO: Should all attacks share the TimerHandle?
 void ASCharacter::SecondaryAttack()
 {
 	PlayAnimMontage(SecondaryAttackAnimation);
 
-	GetWorldTimerManager().SetTimer(TimerHandle_SecondaryAttack, this,
-	                                &ASCharacter::SecondaryAttack_TimeElapsed, SecondaryAttackFireDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_SecondaryAttack, this, &ASCharacter::SecondaryAttack_TimeElapsed,
+	                                SecondaryAttackFireDelay);
 }
-
 
 void ASCharacter::SecondaryAttack_TimeElapsed()
 {
-	const FVector MuzzleLocation = GetMesh()->GetSocketLocation(SecondaryAttackMuzzleName);
-	const FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
-
-	DrawDebugLine(GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
-	              FColor::Purple, false, 2.0f);
-
-	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
-
-	const FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
-
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-
-	GetWorld()->SpawnActor<AActor>(SecondaryProjectileClass, SpawnTransform, SpawnParams);
+	SpawnProjectile(GetMesh()->GetSocketLocation(SecondaryAttackMuzzleName), SecondaryProjectileClass);
 }
 
 
@@ -176,20 +140,23 @@ void ASCharacter::TertiaryAttack()
 {
 	PlayAnimMontage(TertiaryAttackAnimation);
 
-	GetWorldTimerManager().SetTimer(TimerHandle_TertiaryAttack, this,
-	                                &ASCharacter::TertiaryAttack_TimeElapsed, TertiaryAttackFireDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_TertiaryAttack, this, &ASCharacter::TertiaryAttack_TimeElapsed,
+	                                TertiaryAttackFireDelay);
 }
 
 
 void ASCharacter::TertiaryAttack_TimeElapsed()
 {
-	const FVector MuzzleLocation = GetMesh()->GetSocketLocation(TertiaryAttackMuzzleName);
-	const FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
+	SpawnProjectile(GetMesh()->GetSocketLocation(TertiaryAttackMuzzleName), TertiaryProjectileClass);
+}
 
+void ASCharacter::SpawnProjectile(const FVector& MuzzleLocation, const TSubclassOf<AActor> ProjectileClass)
+{
+	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
+
+	const FRotator AimRotation = GetAimRotationFromMuzzle(MuzzleLocation);
 	DrawDebugLine(GetWorld(), MuzzleLocation, MuzzleLocation + AimRotation.Vector() * 5000,
 	              FColor::Purple, false, 2.0f);
-
-	// TODO: READ ON COLLISIONS: https://docs.unrealengine.com/5.2/en-US/collision-in-unreal-engine/
 
 	const FTransform SpawnTransform = FTransform(AimRotation, MuzzleLocation);
 
@@ -197,11 +164,10 @@ void ASCharacter::TertiaryAttack_TimeElapsed()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
 
-	GetWorld()->SpawnActor<AActor>(TertiaryProjectileClass, SpawnTransform, SpawnParams);
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
 }
 
-FRotator ASCharacter::GetAimRotationFromMuzzle(const FVector& MuzzleLocation,
-                                               const float Range /*= 5000.0f*/) const
+FRotator ASCharacter::GetAimRotationFromMuzzle(const FVector& MuzzleLocation, const float Range /*= 5000.0f*/) const
 {
 	const FVector TraceStart = CameraComp->GetComponentLocation();
 	const FVector TraceEnd = TraceStart + CameraComp->GetForwardVector() * Range;
