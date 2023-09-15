@@ -175,8 +175,11 @@ FRotator ASCharacter::GetAimRotationFromMuzzle(const FVector& MuzzleLocation, co
 	FHitResult HitResult;
 	const bool bHit = GetWorld()->LineTraceSingleByProfile(HitResult, TraceStart, TraceEnd, "Projectile");
 
+	// We could also be using a SweepSingle... with some sphere shape to let the player miss a little bit with
+	// their crosshairs and read the Hit.ImpactPoint and sliiightly reroute the shot towards the target.
 	DrawDebugLineTraceSingle(GetWorld(), TraceStart, TraceEnd, EDrawDebugTrace::ForDuration, bHit, HitResult,
 	                         FLinearColor::Blue, FLinearColor::Green, 2.0f);
 
+	// Rotator made from vector between HitResult/TraceEnd and MuzzleLocation.
 	return ((bHit ? HitResult.Location : TraceEnd) - MuzzleLocation).Rotation();
 }
