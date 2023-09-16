@@ -11,7 +11,7 @@ ASTargetDummy::ASTargetDummy()
 
 	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComp");
 	// Trigger when health is changed (damage/healing)
-	AttributeComp->OnHealthChanged.AddDynamic(this, &ASTargetDummy::OnHealthChanged);
+	AttributeComp->HealthChanged.AddDynamic(this, &ASTargetDummy::OnHealthChanged);
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst

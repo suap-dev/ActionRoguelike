@@ -32,6 +32,8 @@ void ASMagicProjectile::OnActorOverlap([[maybe_unused]] UPrimitiveComponent* Ove
 			UE_LOG(LogTemp, Log, TEXT("Done %.1f damage"), Damage);
 
 			AttributeComp->ApplyHealthChange(-Damage);
+
+			Explode();
 		}
 	}
 	else

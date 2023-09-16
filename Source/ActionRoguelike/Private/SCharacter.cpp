@@ -33,6 +33,13 @@ ASCharacter::ASCharacter()
 	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComp");
 }
 
+void ASCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	AttributeComp->HealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
+}
+
 
 // Called when the game starts or when spawned
 void ASCharacter::BeginPlay()
@@ -148,6 +155,16 @@ void ASCharacter::TertiaryAttack()
 void ASCharacter::TertiaryAttack_TimeElapsed()
 {
 	SpawnProjectile(GetMesh()->GetSocketLocation(TertiaryAttackMuzzleName), TertiaryProjectileClass);
+}
+
+void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, const float NewHealth,
+                                  const float Delta)
+{
+	if (NewHealth <= 0.0f && Delta < 0.0f)
+	{
+		APlayerController* PlayerController = Cast<APlayerController>(GetController());
+		DisableInput(PlayerController);
+	}
 }
 
 void ASCharacter::SpawnProjectile(const FVector& MuzzleLocation, const TSubclassOf<AActor> ProjectileClass)

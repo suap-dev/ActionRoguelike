@@ -77,17 +77,15 @@ protected:
 	FTimerHandle TimerHandle_TertiaryAttack;
 
 public:
-	// Sets default values for this character's properties
 	ASCharacter();
 
 protected:
-	// Called when the game starts or when spawned
+	virtual void PostInitializeComponents() override;
+
 	virtual void BeginPlay() override;
 
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void MoveForward(float Value);
@@ -103,6 +101,10 @@ protected:
 
 	void TertiaryAttack();
 	void TertiaryAttack_TimeElapsed();
+
+	UFUNCTION()
+	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth,
+	                     float Delta);
 
 	void SpawnProjectile(const FVector& MuzzleLocation, TSubclassOf<AActor> ProjectileClass);
 

@@ -15,7 +15,7 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Damage")
 	float Damage = 20.0f;
 
 	UFUNCTION(BlueprintCallable)

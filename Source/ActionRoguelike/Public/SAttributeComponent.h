@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "SAttributeComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnHealthChanged,
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FHealthChanged,
                                               AActor*, InstigatorActor,
                                               USAttributeComponent*, OwningComp,
                                               float, NewHealth,
@@ -28,8 +28,14 @@ protected:
 	// HealthMax, Stamina, Strength
 
 public:
+	UFUNCTION(BlueprintCallable)
+	bool IsAlive() const;
+
+	// TODO: Recall how this actually works (also -- look at the top of this file).
+	// As I understand it atm -- AttributeComponent broadcasts the fact that Health Changed,
+	// an other classes can subscribe to listen for this event.	
 	UPROPERTY(BlueprintAssignable)
-	FOnHealthChanged OnHealthChanged;
+	FHealthChanged HealthChanged;
 	// AActor*, InstigatorActor,
 	// USAttributeComponent, OwningComp,
 	// float, NewHealth,
